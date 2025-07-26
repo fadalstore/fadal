@@ -1,3 +1,4 @@
+modules = ["nodejs-23", "nodejs-24", "nodejs-20", "nodejs-19", "nodejs-18", "nodejs-16", "nodejs-14", "php-8.4", "php-8.1", "python-3.9", "python-3.8", "python-base-3.13", "python-3.10", "python-base-3.11", "python-3.12", "swift-5.6", "swift-5.8"]
 [nix]
 channel = "stable-25_05"
 
@@ -39,3 +40,7 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "php -S 0.0.0.0:5000"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
