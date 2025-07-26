@@ -160,7 +160,18 @@
         }
 
         function loadDashboardData() {
-            // Load payment data
+            // Load real data from API
+            fetch('/api/analytics')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('totalRevenue').textContent = `$${data.total_revenue.toFixed(2)}`;
+                    document.getElementById('activeUsers').textContent = data.active_users;
+                    document.getElementById('todayIncome').textContent = `$${data.today_income.toFixed(2)}`;
+                    loadPaymentsTable();
+                    loadUsersList();
+                });
+            
+            // Old localStorage fallback
             const payments = JSON.parse(localStorage.getItem('payments') || '[]');
             const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
 
