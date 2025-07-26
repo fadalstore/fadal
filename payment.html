@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment System - Fadal Rewards</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .payment-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #28a745;
+        }
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .payment-method {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .payment-method.selected {
+            border-color: #28a745;
+            background: #f8fff8;
+        }
+        .payment-method:hover {
+            border-color: #28a745;
+        }
+        .pricing-plans {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .plan {
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .plan.selected {
+            border-color: #28a745;
+            background: #f8fff8;
+        }
+        .plan.popular {
+            border-color: #ffd700;
+            background: linear-gradient(135deg, #fff7e6 0%, #fff3cd 100%);
+        }
+        .plan.popular::before {
+            content: "🔥 POPULAR";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffd700;
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .user-dashboard {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .dashboard-stat {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Fadal Rewards 💳</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="#" onclick="showLogin()" class="nav-link">Login</a></li>
+                <li class="nav-item"><a href="#" onclick="logout()" class="nav-link" id="logoutBtn" style="display: none;">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Registration/Login Form -->
+        <div id="authSection" class="payment-container">
+            <div id="loginForm">
+                <h2>🔐 Login / Register</h2>
+                <form onsubmit="handleAuth(event)">
+                    <div class="form-group">
+                        <label>Magacaaga buuxa:</label>
+                        <input type="text" id="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address:</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number:</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                    <button type="submit" class="cta-button" style="width: 100%; margin-top: 20px;">
+                        Continue / Sii wad
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Payment Section -->
+        <div id="paymentSection" class="payment-container" style="display: none;">
+            <h2>💰 Choose Your Plan</h2>
+            <p>Dooro qorshaha kuu habboon lacag-helidda:</p>
+
+            <div class="pricing-plans">
+                <div class="plan" onclick="selectPlan('basic', 9.99)">
+                    <h3>🥉 Basic Plan</h3>
+                    <div style="font-size: 2rem; font-weight: bold; color: #28a745; margin: 15px 0;">$9.99</div>
+                    <ul style="text-align: left; margin: 20px 0;">
+                        <li>✅ 10 Money-making links</li>
+                        <li>✅ Basic support</li>
+                        <li>✅ Email updates</li>
+                        <li>✅ Mobile access</li>
+                    </ul>
+                </div>
+
+                <div class="plan popular" onclick="selectPlan('premium', 19.99)">
+                    <h3>🥈 Premium Plan</h3>
+                    <div style="font-size: 2rem; font-weight: bold; color: #28a745; margin: 15px 0;">$19.99</div>
+                    <ul style="text-align: left; margin: 20px 0;">
+                        <li>✅ 50+ Money-making links</li>
+                        <li>✅ Priority support</li>
+                        <li>✅ Weekly tips</li>
+                        <li>✅ Exclusive content</li>
+                        <li>✅ WhatsApp group</li>
+                    </ul>
+                </div>
+
+                <div class="plan" onclick="selectPlan('vip', 39.99)">
+                    <h3>🥇 VIP Plan</h3>
+                    <div style="font-size: 2rem; font-weight: bold; color: #28a745; margin: 15px 0;">$39.99</div>
+                    <ul style="text-align: left; margin: 20px 0;">
+                        <li>✅ 100+ Premium links</li>
+                        <li>✅ 24/7 VIP support</li>
+                        <li>✅ Daily updates</li>
+                        <li>✅ Private consultations</li>
+                        <li>✅ Secret methods</li>
+                        <li>✅ Lifetime access</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="selectedPlan" style="display: none;">
+                <h3>📋 Payment Details</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <p><strong>Selected Plan:</strong> <span id="planName"></span></p>
+                    <p><strong>Amount:</strong> $<span id="planAmount"></span></p>
+                </div>
+
+                <h4>💳 Choose Payment Method:</h4>
+                <div class="payment-methods">
+                    <div class="payment-method" onclick="selectPaymentMethod('paypal')">
+                        <h4>💙 PayPal</h4>
+                        <p>Secure & Fast</p>
+                    </div>
+                    <div class="payment-method" onclick="selectPaymentMethod('stripe')">
+                        <h4>💳 Credit Card</h4>
+                        <p>Visa, Mastercard</p>
+                    </div>
+                    <div class="payment-method" onclick="selectPaymentMethod('mobile')">
+                        <h4>📱 Mobile Money</h4>
+                        <p>Zaad, EVC Plus</p>
+                    </div>
+                </div>
+
+                <button onclick="processPayment()" class="cta-button" style="width: 100%; margin-top: 30px;" id="payBtn" disabled>
+                    💰 Process Payment - $<span id="payAmount">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- User Dashboard -->
+        <div id="userDashboard" class="payment-container" style="display: none;">
+            <h2>🎯 Welcome Back, <span id="userName"></span>!</h2>
+            
+            <div class="dashboard-stat">
+                <h3>💰 Your Plan: <span id="userPlan"></span></h3>
+                <p>Status: <strong style="color: #ffd700;">ACTIVE</strong></p>
+            </div>
+
+            <div class="user-dashboard">
+                <h3>📊 Your Statistics</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                        <h4>🔗 Available Links</h4>
+                        <div style="font-size: 1.5rem; font-weight: bold;" id="availableLinks">0</div>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                        <h4>💵 Potential Earnings</h4>
+                        <div style="font-size: 1.5rem; font-weight: bold;" id="potentialEarnings">$0</div>
+                    </div>
+                </div>
+
+                <h3>🔥 Exclusive Content</h3>
+                <div id="exclusiveContent">
+                    <!-- Content will be loaded based on plan -->
+                </div>
+
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="https://your-premium-content-link.com" class="cta-button" target="_blank">
+                        🚀 Access Premium Links
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="payment-container success-message" style="display: none;">
+            <h2>🎉 Payment Successful!</h2>
+            <p>Mahadsanid! Payment-kaagu waa guulaysay. Hadda waxyaabaha cusub ayaad heli kartaa:</p>
+            <ul style="text-align: left; margin: 20px 0;">
+                <li>✅ Immediate access si lacag-making links</li>
+                <li>✅ Email confirmation</li>
+                <li>✅ WhatsApp group invitation</li>
+                <li>✅ Premium support</li>
+            </ul>
+            <button onclick="showDashboard()" class="cta-button">
+                🎯 Go to Dashboard
+            </button>
+        </div>
+    </main>
+
+    <script>
+        let selectedPlan = null;
+        let selectedPaymentMethod = null;
+        let currentUser = null;
+
+        function handleAuth(event) {
+            event.preventDefault();
+            const name = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            // Check if user exists
+            let users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            let user = users.find(u => u.email === email);
+
+            if (!user) {
+                // Register new user
+                user = {
+                    id: Date.now(),
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    registeredDate: new Date().toISOString(),
+                    hasPaid: false,
+                    plan: null
+                };
+                users.push(user);
+                localStorage.setItem('registeredUsers', JSON.stringify(users));
+            }
+
+            currentUser = user;
+            localStorage.setItem('currentUser', JSON.stringify(user));
+
+            if (user.hasPaid) {
+                showDashboard();
+            } else {
+                showPayment();
+            }
+        }
+
+        function showLogin() {
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('paymentSection').style.display = 'none';
+            document.getElementById('userDashboard').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function showPayment() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('paymentSection').style.display = 'block';
+            document.getElementById('userDashboard').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function showDashboard() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('paymentSection').style.display = 'none';
+            document.getElementById('userDashboard').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'block';
+
+            if (currentUser) {
+                document.getElementById('userName').textContent = currentUser.name;
+                document.getElementById('userPlan').textContent = currentUser.plan || 'Premium';
+                loadUserContent();
+            }
+        }
+
+        function selectPlan(planType, amount) {
+            selectedPlan = { type: planType, amount: amount };
+            
+            // Remove previous selections
+            document.querySelectorAll('.plan').forEach(plan => plan.classList.remove('selected'));
+            event.target.closest('.plan').classList.add('selected');
+            
+            document.getElementById('planName').textContent = planType.toUpperCase();
+            document.getElementById('planAmount').textContent = amount;
+            document.getElementById('payAmount').textContent = amount;
+            document.getElementById('selectedPlan').style.display = 'block';
+        }
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            
+            // Remove previous selections
+            document.querySelectorAll('.payment-method').forEach(pm => pm.classList.remove('selected'));
+            event.target.closest('.payment-method').classList.add('selected');
+            
+            document.getElementById('payBtn').disabled = false;
+        }
+
+        function processPayment() {
+            if (!selectedPlan || !selectedPaymentMethod) {
+                alert('Please select a plan and payment method');
+                return;
+            }
+
+            // Simulate payment processing
+            const payBtn = document.getElementById('payBtn');
+            payBtn.innerHTML = '⏳ Processing...';
+            payBtn.disabled = true;
+
+            setTimeout(() => {
+                // Record payment
+                const payment = {
+                    id: Date.now(),
+                    userEmail: currentUser.email,
+                    amount: selectedPlan.amount,
+                    plan: selectedPlan.type,
+                    method: selectedPaymentMethod,
+                    date: new Date().toISOString(),
+                    status: 'completed'
+                };
+
+                let payments = JSON.parse(localStorage.getItem('payments') || '[]');
+                payments.push(payment);
+                localStorage.setItem('payments', JSON.stringify(payments));
+
+                // Update user
+                currentUser.hasPaid = true;
+                currentUser.plan = selectedPlan.type;
+                
+                let users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                const userIndex = users.findIndex(u => u.email === currentUser.email);
+                if (userIndex !== -1) {
+                    users[userIndex] = currentUser;
+                    localStorage.setItem('registeredUsers', JSON.stringify(users));
+                }
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                // Show success
+                document.getElementById('paymentSection').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+            }, 2000);
+        }
+
+        function loadUserContent() {
+            const plan = currentUser.plan || 'premium';
+            let linksCount, earnings, content;
+
+            switch (plan) {
+                case 'basic':
+                    linksCount = 10;
+                    earnings = 100;
+                    content = '🔗 10 proven money-making links<br>📧 Weekly email tips<br>📱 Mobile access';
+                    break;
+                case 'premium':
+                    linksCount = 50;
+                    earnings = 500;
+                    content = '🔗 50+ premium links<br>💬 WhatsApp VIP group<br>📧 Daily tips<br>🎯 Exclusive methods';
+                    break;
+                case 'vip':
+                    linksCount = 100;
+                    earnings = 1000;
+                    content = '🔗 100+ secret links<br>👨‍💼 Personal consultation<br>📞 24/7 support<br>💎 Lifetime access<br>🔥 Secret methods';
+                    break;
+            }
+
+            document.getElementById('availableLinks').textContent = linksCount;
+            document.getElementById('potentialEarnings').textContent = `$${earnings}`;
+            document.getElementById('exclusiveContent').innerHTML = content;
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            document.getElementById('logoutBtn').style.display = 'none';
+            showLogin();
+        }
+
+        // Check if user is logged in
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+            if (currentUser.hasPaid) {
+                showDashboard();
+            } else {
+                showPayment();
+            }
+        }
+    </script>
+</body>
+</html>
