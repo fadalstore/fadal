@@ -78,6 +78,28 @@ body {
     transition: 0.3s;
 }
 
+/* Language Selector */
+.language-selector {
+    background-color: #f8f9fa;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.language-selector:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.language-selector:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+}
+
 /* Main Content */
 .main-content {
     margin-top: 70px;
@@ -368,6 +390,12 @@ body {
 
     .hamburger {
         display: flex;
+    }
+    
+    .language-selector {
+        margin-top: 15px;
+        font-size: 0.8rem;
+        padding: 6px 10px;
     }
 
     .hero-title {
