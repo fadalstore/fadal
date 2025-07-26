@@ -145,6 +145,79 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
+/* Social Media Buttons */
+.social-buttons {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.social-buttons h3 {
+    color: white;
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.social-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    color: white;
+    min-width: 140px;
+    text-align: center;
+}
+
+.subscribe-btn {
+    background: linear-gradient(45deg, #ff0000, #ff4444);
+}
+
+.subscribe-btn:hover {
+    background: linear-gradient(45deg, #cc0000, #ff0000);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255,0,0,0.3);
+}
+
+.follow-btn {
+    background: linear-gradient(45deg, #1877f2, #42a5f5);
+}
+
+.follow-btn:hover {
+    background: linear-gradient(45deg, #166fe5, #1877f2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(24,119,242,0.3);
+}
+
+.like-btn {
+    background: linear-gradient(45deg, #000000, #333333);
+}
+
+.like-btn:hover {
+    background: linear-gradient(45deg, #333333, #000000);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.instagram-btn {
+    background: linear-gradient(45deg, #e1306c, #fd1d1d, #fcb045);
+}
+
+.instagram-btn:hover {
+    background: linear-gradient(45deg, #c13584, #e1306c, #fd1d1d);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(225,48,108,0.3);
+}
+
 /* Page Sections */
 .page-section {
     padding: 60px 0;
@@ -294,6 +367,19 @@ body {
     .cta-button {
         font-size: 1rem;
         padding: 12px 25px;
+    }
+
+    .social-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .social-btn {
+        width: 80%;
+        max-width: 250px;
+        font-size: 0.9rem;
+        padding: 10px 15px;
     }
 
     .page-section h1 {
