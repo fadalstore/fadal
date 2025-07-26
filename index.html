@@ -23,6 +23,17 @@
             });
         }
     </script>
+    
+    <!-- Visitor Counter -->
+    <script>
+        // Simple visitor counter using localStorage
+        function updateVisitorCount() {
+            let visitors = localStorage.getItem('visitorCount') || 0;
+            visitors = parseInt(visitors) + 1;
+            localStorage.setItem('visitorCount', visitors);
+            document.getElementById('visitor-count').textContent = visitors;
+        }
+    </script>
 </head>
 <body>
     <nav class="navbar">
@@ -67,6 +78,11 @@
                 <a href="https://your-adsterra-direct-link.com" class="cta-button" target="_blank" onclick="trackClick()">
                     👉 HALKAN GUJI si aad u bilowdo safarkaaga lacag-helidda!
                 </a>
+
+                <!-- Visitor Counter -->
+                <div class="visitor-counter">
+                    <p>👥 Dadka soo booqday: <strong id="visitor-count">0</strong></p>
+                </div>
 
                 <!-- Social Media Buttons -->
                 <div class="social-buttons">

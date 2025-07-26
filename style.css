@@ -145,6 +145,26 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
+/* Visitor Counter */
+.visitor-counter {
+    background-color: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 30px 0;
+    text-align: center;
+}
+
+.visitor-counter p {
+    color: white;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.visitor-counter strong {
+    color: #28a745;
+    font-size: 1.3rem;
+}
+
 /* Social Media Buttons */
 .social-buttons {
     margin-top: 50px;

@@ -18,5 +18,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+    
+    // Update visitor count
+    updateVisitorCount();
 });
-</script>
+
+// Simple visitor counter using localStorage
+function updateVisitorCount() {
+    let visitors = localStorage.getItem('visitorCount') || 0;
+    visitors = parseInt(visitors) + 1;
+    localStorage.setItem('visitorCount', visitors);
+    
+    const counterElement = document.getElementById('visitor-count');
+    if (counterElement) {
+        counterElement.textContent = visitors;
+    }
+}
