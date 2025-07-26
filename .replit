@@ -11,4 +11,13 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python3 -m http.server 5000"
+args = "npx serve -s . -l 5000"
+
+[[workflows.workflow]]
+name = "Start Website Alternative"
+author = 45532938
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "php -S 0.0.0.0:5000"
