@@ -6,6 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fadal Rewards - Ku Soo Dhawoow</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+        
+        // Click tracking for Adsterra link
+        function trackClick() {
+            gtag('event', 'click', {
+                'event_category': 'Adsterra',
+                'event_label': 'Main CTA Button'
+            });
+        }
+    </script>
 </head>
 <body>
     <nav class="navbar">
@@ -47,7 +64,7 @@
                     </ul>
                 </div>
 
-                <a href="https://your-adsterra-direct-link.com" class="cta-button" target="_blank">
+                <a href="https://your-adsterra-direct-link.com" class="cta-button" target="_blank" onclick="trackClick()">
                     👉 HALKAN GUJI si aad u bilowdo safarkaaga lacag-helidda!
                 </a>
             </div>
