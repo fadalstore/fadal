@@ -1,2 +1,22 @@
 [nix]
 channel = "stable-25_05"
+
+[workflows]
+runButton = "Full Website"
+
+[[workflows.workflow]]
+name = "Full Website"
+author = 45532938
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 database.py &"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "sleep 3"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 -m http.server 5000 --bind 0.0.0.0"
