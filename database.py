@@ -112,42 +112,49 @@ class DatabaseManager:
             'today_income': today_income
         }
 
-# Initialize database first
+# Initialize database
 db = DatabaseManager()
 
 # API endpoints
 try:
-    from flask import Flask, request, jsonify
+    from flask import Flask, request, jsonify, render_template_string
+    from flask_cors import CORS
+    
     app = Flask(__name__)
+    CORS(app)
     flask_available = True
+    
+    @app.route('/api/register', methods=['POST'])
+    def register_user():
+        data = request.json
+        success = db.add_user(data['name'], data['email'], data['phone'])
+        return jsonify({'success': success})
+
+    @app.route('/api/payment', methods=['POST'])
+    def process_payment():
+        data = request.json
+        db.record_payment(data['email'], data['amount'], data['plan'], data['method'])
+        return jsonify({'success': True})
+
+    @app.route('/api/analytics', methods=['GET'])
+    def get_analytics():
+        return jsonify(db.get_analytics())
+    
+    @app.route('/health', methods=['GET'])
+    def health_check():
+        return jsonify({'status': 'healthy', 'database': 'connected'})
+
 except ImportError:
     print("Flask not available, running database only")
     flask_available = False
-
-@app.route('/api/register', methods=['POST'])
-def register_user():
-    data = request.json
-    success = db.add_user(data['name'], data['email'], data['phone'])
-    return jsonify({'success': success})
-
-@app.route('/api/payment', methods=['POST'])
-def process_payment():
-    data = request.json
-    db.record_payment(data['email'], data['amount'], data['plan'], data['method'])
-    return jsonify({'success': True})
-
-@app.route('/api/analytics', methods=['GET'])
-def get_analytics():
-    return jsonify(db.get_analytics())
 
 if __name__ == '__main__':
     print("Database initialized successfully!")
     if flask_available:
         print("Starting Flask API on port 5001...")
-        app.run(host='0.0.0.0', port=5001)
+        app.run(host='0.0.0.0', port=5001, debug=True)
     else:
         print("Flask not available, database running in standalone mode")
-        # Keep the script running
         import time
         while True:
             time.sleep(60)

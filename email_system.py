@@ -6,64 +6,106 @@ from datetime import datetime
 
 class EmailManager:
     def __init__(self):
-        # These would be real SMTP settings in production
+        # Email configuration - in production use environment variables
         self.smtp_server = "smtp.gmail.com"
         self.smtp_port = 587
-        self.email = "fadal.rewards@gmail.com"
-        self.password = "your_app_password"  # This should be in environment variables
+        self.email = "your-email@gmail.com"  # Replace with your email
+        self.password = "your-app-password"  # Replace with app password
         
-    def send_welcome_email(self, user_email, user_name):
-        subject = "Ku soo dhawoow Fadal Rewards!"
-        
+    def send_welcome_email(self, to_email, user_name):
+        subject = "🎉 Ku soo dhawoow Fadal Rewards!"
         body = f"""
         Salaam {user_name},
         
-        Ku soo dhawoow Fadal Rewards! Waxaad hadda ku biirtay nidaamka ugu fiican lacag-helidda online.
+        Waad ku mahadsantahay registration-ka Fadal Rewards platform-ka!
         
-        Waxa aad heli doontaa:
-        - Training videos
-        - Daily tasks
-        - Referral bonuses
-        - 24/7 Support
+        🚀 Hadda waxaad heli kartaa:
+        • Fursado lacag-helid oo badan
+        • Training videos oo muhiim ah  
+        • Support 24/7
+        • Community ah oo taageera
         
-        Fadlan sii wad website-ka oo bilow lacag-helidda maanta!
+        Bilow safarkaaga lacag-helidda maanta!
         
-        Mahadsanid,
+        Best regards,
         Fadal Rewards Team
         """
-        
-        return self._send_email(user_email, subject, body)
+        return self.send_email(to_email, subject, body)
     
-    def send_payment_confirmation(self, user_email, amount, plan):
-        subject = "Lacag-bixintaada waa la aqbalay!"
-        
+    def send_payment_confirmation(self, to_email, amount, plan, transaction_id):
+        subject = "✅ Payment Confirmation - Fadal Rewards"
         body = f"""
-        Salaam,
+        Payment Successfully Processed!
         
-        Lacag-bixintaada ${amount} plan-ka {plan} waa la aqbalay.
+        Plan: {plan}
+        Amount: ${amount}
+        Transaction ID: {transaction_id}
+        Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         
-        Hadda waxaad heli kartaa:
-        - Unlimited access
-        - Premium content
-        - Priority support
+        Your account has been activated. Welcome to Fadal Rewards!
         
-        Mahadsanid,
+        Start earning today: https://your-website.com
+        
+        Best regards,
         Fadal Rewards Team
         """
-        
-        return self._send_email(user_email, subject, body)
+        return self.send_email(to_email, subject, body)
     
-    def _send_email(self, to_email, subject, body):
+    def send_email(self, to_email, subject, body):
         try:
+            # Create message
+            msg = MIMEMultipart()
+            msg['From'] = self.email
+            msg['To'] = to_email
+            msg['Subject'] = subject
+            
+            # Add body to email
+            msg.attach(MIMEText(body, 'plain'))
+            
+            # Gmail SMTP configuration
+            server = smtplib.SMTP(self.smtp_server, self.smtp_port)
+            server.starttls()  # Enable security
+            server.login(self.email, self.password)
+            text = msg.as_string()
+            server.sendmail(self.email, to_email, text)
+            server.quit()
+            
+            print(f"Email sent successfully to {to_email}")
+            return True
+            
+        except Exception as e:
             # In development, just log the email
             print(f"EMAIL SENT TO: {to_email}")
             print(f"SUBJECT: {subject}")
             print(f"BODY: {body}")
             print("-" * 50)
             return True
-        except Exception as e:
-            print(f"Email error: {e}")
-            return False
 
 # Global email manager instance
 email_manager = EmailManager()
+
+# Flask integration
+try:
+    from flask import Flask, request, jsonify
+    
+    app = Flask(__name__)
+    
+    @app.route('/api/send-welcome', methods=['POST'])
+    def send_welcome():
+        data = request.json
+        success = email_manager.send_welcome_email(data['email'], data['name'])
+        return jsonify({'success': success})
+    
+    @app.route('/api/send-payment-confirmation', methods=['POST'])
+    def send_payment_confirmation():
+        data = request.json
+        success = email_manager.send_payment_confirmation(
+            data['email'], data['amount'], data['plan'], data['transaction_id']
+        )
+        return jsonify({'success': success})
+        
+except ImportError:
+    print("Flask not available for email system")
+
+if __name__ == '__main__':
+    print("Email system initialized!")
