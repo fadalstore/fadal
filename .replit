@@ -11,7 +11,7 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python3 database.py &"
+args = "python database.py &"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
@@ -19,4 +19,4 @@ args = "sleep 3"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python3 -m http.server 5000 --bind 0.0.0.0"
+args = "python -m http.server 5000 --bind 0.0.0.0"
