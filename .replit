@@ -1,3 +1,4 @@
+modules = ["php-8.4", "python-3.8", "python-base-3.11", "python-3.11", "python-3.12", "swift-5.8", "swift-5.6", "zig-0.11", "php-8.2", "php-8.1", "nodejs-20", "nodejs-22", "nodejs-23", "nodejs-24", "lua-5.2", "nix", "bash"]
 [nix]
 channel = "stable-25_05"
 
