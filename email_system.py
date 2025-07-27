@@ -2,62 +2,68 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import os
+from datetime import datetime
 
-class EmailSystem:
+class EmailManager:
     def __init__(self):
+        # These would be real SMTP settings in production
         self.smtp_server = "smtp.gmail.com"
         self.smtp_port = 587
-        self.email = os.getenv('SMTP_EMAIL')
-        self.password = os.getenv('SMTP_PASSWORD')
-    
-    def send_welcome_email(self, user_email, user_name, plan):
-        subject = f"Ku soo dhawoow Fadal Rewards - {plan} Plan!"
+        self.email = "fadal.rewards@gmail.com"
+        self.password = "your_app_password"  # This should be in environment variables
         
-        html_content = f"""
-        <html>
-        <body style="font-family: Arial, sans-serif;">
-            <h2>🎉 Mahadsanid {user_name}!</h2>
-            <p>Waxaad si guul leh ugu biirisay Fadal Rewards {plan} plan!</p>
-            
-            <h3>Waxaad hadda heli kartaa:</h3>
-            <ul>
-                <li>✅ Premium money-making links</li>
-                <li>✅ Tilmaamo sir ah</li>
-                <li>✅ 24/7 Support</li>
-                <li>✅ WhatsApp VIP group</li>
-            </ul>
-            
-            <a href="https://your-repl-url.replit.app/payment.html" 
-               style="background: #28a745; color: white; padding: 15px 30px; 
-               text-decoration: none; border-radius: 5px; display: inline-block;">
-               🚀 Access Your Premium Content
-            </a>
-            
-            <p>Haddii aad qabto su'aalo, nala soo xiriir: support@fadalrewards.com</p>
-        </body>
-        </html>
+    def send_welcome_email(self, user_email, user_name):
+        subject = "Ku soo dhawoow Fadal Rewards!"
+        
+        body = f"""
+        Salaam {user_name},
+        
+        Ku soo dhawoow Fadal Rewards! Waxaad hadda ku biirtay nidaamka ugu fiican lacag-helidda online.
+        
+        Waxa aad heli doontaa:
+        - Training videos
+        - Daily tasks
+        - Referral bonuses
+        - 24/7 Support
+        
+        Fadlan sii wad website-ka oo bilow lacag-helidda maanta!
+        
+        Mahadsanid,
+        Fadal Rewards Team
         """
         
-        return self.send_email(user_email, subject, html_content)
+        return self._send_email(user_email, subject, body)
     
-    def send_email(self, to_email, subject, html_content):
+    def send_payment_confirmation(self, user_email, amount, plan):
+        subject = "Lacag-bixintaada waa la aqbalay!"
+        
+        body = f"""
+        Salaam,
+        
+        Lacag-bixintaada ${amount} plan-ka {plan} waa la aqbalay.
+        
+        Hadda waxaad heli kartaa:
+        - Unlimited access
+        - Premium content
+        - Priority support
+        
+        Mahadsanid,
+        Fadal Rewards Team
+        """
+        
+        return self._send_email(user_email, subject, body)
+    
+    def _send_email(self, to_email, subject, body):
         try:
-            msg = MIMEMultipart('alternative')
-            msg['From'] = self.email
-            msg['To'] = to_email
-            msg['Subject'] = subject
-            
-            html_part = MIMEText(html_content, 'html')
-            msg.attach(html_part)
-            
-            server = smtplib.SMTP(self.smtp_server, self.smtp_port)
-            server.starttls()
-            server.login(self.email, self.password)
-            server.send_message(msg)
-            server.quit()
-            
+            # In development, just log the email
+            print(f"EMAIL SENT TO: {to_email}")
+            print(f"SUBJECT: {subject}")
+            print(f"BODY: {body}")
+            print("-" * 50)
             return True
         except Exception as e:
             print(f"Email error: {e}")
             return False
+
+# Global email manager instance
+email_manager = EmailManager()

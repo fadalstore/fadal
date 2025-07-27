@@ -112,10 +112,17 @@ class DatabaseManager:
             'today_income': today_income
         }
 
-# API endpoints
-from flask import Flask, request, jsonify
-app = Flask(__name__)
+# Initialize database first
 db = DatabaseManager()
+
+# API endpoints
+try:
+    from flask import Flask, request, jsonify
+    app = Flask(__name__)
+    flask_available = True
+except ImportError:
+    print("Flask not available, running database only")
+    flask_available = False
 
 @app.route('/api/register', methods=['POST'])
 def register_user():
@@ -134,4 +141,13 @@ def get_analytics():
     return jsonify(db.get_analytics())
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    print("Database initialized successfully!")
+    if flask_available:
+        print("Starting Flask API on port 5001...")
+        app.run(host='0.0.0.0', port=5001)
+    else:
+        print("Flask not available, database running in standalone mode")
+        # Keep the script running
+        import time
+        while True:
+            time.sleep(60)

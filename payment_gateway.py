@@ -1,54 +1,53 @@
 
-import stripe
-import paypal
 from datetime import datetime
+import json
+import secrets
 
-class PaymentProcessor:
+class PaymentGateway:
     def __init__(self):
-        # Test keys - beddelayo production keys marka
-        stripe.api_key = "sk_test_your_stripe_secret_key"
-        self.paypal_client_id = "your_paypal_client_id"
-        self.paypal_secret = "your_paypal_secret"
+        self.transactions = {}
     
-    def create_stripe_payment(self, amount, email, plan):
-        try:
-            payment_intent = stripe.PaymentIntent.create(
-                amount=int(amount * 100),  # Stripe uses cents
-                currency='usd',
-                automatic_payment_methods={
-                    'enabled': True,
-                },
-                metadata={
-                    'email': email,
-                    'plan': plan
-                }
-            )
-            return {
-                'success': True,
-                'client_secret': payment_intent.client_secret,
-                'payment_id': payment_intent.id
-            }
-        except Exception as e:
-            return {'success': False, 'error': str(e)}
-    
-    def verify_stripe_payment(self, payment_intent_id):
-        try:
-            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-            return payment_intent.status == 'succeeded'
-        except:
-            return False
-    
-    def create_paypal_order(self, amount, email, plan):
-        # PayPal order creation logic
-        return {
+    def process_stripe_payment(self, amount, email, plan):
+        # Simulate Stripe payment
+        transaction_id = f"stripe_{secrets.token_hex(8)}"
+        result = {
             'success': True,
-            'order_id': f"PAYPAL_{datetime.now().timestamp()}"
+            'transaction_id': transaction_id,
+            'amount': amount,
+            'method': 'stripe',
+            'timestamp': datetime.now().isoformat()
         }
+        self.transactions[transaction_id] = result
+        return result
     
-    # Mobile Money integration (Zaad, EVC Plus)
-    def process_mobile_payment(self, phone, amount, provider):
-        # Integration with Somali mobile money APIs
-        return {
+    def process_paypal_payment(self, amount, email, plan):
+        # Simulate PayPal payment
+        transaction_id = f"paypal_{secrets.token_hex(8)}"
+        result = {
             'success': True,
-            'transaction_id': f"{provider}_{datetime.now().timestamp()}"
+            'transaction_id': transaction_id,
+            'amount': amount,
+            'method': 'paypal',
+            'timestamp': datetime.now().isoformat()
         }
+        self.transactions[transaction_id] = result
+        return result
+    
+    def process_mobile_money(self, amount, phone, plan):
+        # Simulate Mobile Money payment
+        transaction_id = f"mobile_{secrets.token_hex(8)}"
+        result = {
+            'success': True,
+            'transaction_id': transaction_id,
+            'amount': amount,
+            'method': 'mobile_money',
+            'timestamp': datetime.now().isoformat()
+        }
+        self.transactions[transaction_id] = result
+        return result
+    
+    def verify_payment(self, transaction_id):
+        return self.transactions.get(transaction_id)
+
+# Global payment gateway instance
+payment_gateway = PaymentGateway()
