@@ -1,23 +1,2 @@
-modules = ["php-8.4", "python-3.8", "python-base-3.11", "python-3.11", "python-3.12", "swift-5.8", "swift-5.6", "zig-0.11", "php-8.2", "php-8.1", "nodejs-20", "nodejs-22", "nodejs-23", "nodejs-24", "lua-5.2", "nix", "bash"]
 [nix]
 channel = "stable-25_05"
-
-[workflows]
-runButton = "Full Website"
-
-[[workflows.workflow]]
-name = "Full Website"
-author = 45532938
-mode = "sequential"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python database.py &"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "sleep 3"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python -m http.server 5000 --bind 0.0.0.0"
