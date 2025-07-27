@@ -1,7 +1,7 @@
 modules = ["nodejs-23", "nodejs-24", "nodejs-20", "nodejs-19", "nodejs-18", "nodejs-16", "nodejs-14", "php-8.4", "php-8.1", "python-3.9", "python-3.8", "python-base-3.13", "python-3.10", "python-base-3.11", "python-3.12", "swift-5.6", "swift-5.8", "dotnet-9.0", "bash", "nodejs-22", "web", "zig-0.11", "ruff"]
 [nix]
 channel = "stable-25_05"
-packages = ["liferea"]
+packages = ["liferea", "dep-tree"]
 
 [workflows]
 runButton = "Complete System"
@@ -70,7 +70,19 @@ args = "python3 database.py &"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "sleep 3"
+args = "python3 payment_gateway.py &"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 security.py &"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 email_system.py &"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "sleep 5"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"

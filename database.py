@@ -4,10 +4,11 @@ import json
 
 try:
     from flask import Flask, request, jsonify
-    app = Flask(__name__)
     FLASK_AVAILABLE = True
+    app = Flask(__name__)
 except ImportError:
     FLASK_AVAILABLE = False
+    app = None
     print("Flask not available, running database only")
 
 class DatabaseManager:
@@ -123,7 +124,7 @@ class DatabaseManager:
 db = DatabaseManager()
 
 # API endpoints
-if FLASK_AVAILABLE:
+if FLASK_AVAILABLE and app is not None:
     @app.route('/api/register', methods=['POST'])
     def register_user():
         data = request.get_json()
@@ -167,8 +168,8 @@ if __name__ == "__main__":
     db = DatabaseManager()
     print("Database initialized successfully!")
 
-    if FLASK_AVAILABLE:
-        print("Starting Flask server...")
+    if FLASK_AVAILABLE and app is not None:
+        print("Starting Flask server on port 5001...")
         app.run(host='0.0.0.0', port=5001, debug=True)
     else:
         print("Flask not available, database running in standalone mode")
