@@ -1,2 +1,23 @@
+modules = ["nodejs-19", "python-3.9", "php-8.1", "php-8.2", "python-3.8", "swift-5.8", "swift-5.6", "web"]
 [nix]
 channel = "stable-25_05"
+
+[workflows]
+runButton = "Website Server"
+
+[[workflows.workflow]]
+name = "Website Server"
+author = 45532938
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python database.py &"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "sleep 2"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python -m http.server 5000 --bind 0.0.0.0"
